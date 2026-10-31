@@ -1,1 +1,358 @@
+<!doctype html>
+<html lang="hy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ARM ECHO — Unknown Signal</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070b16;
+      --panel: rgba(17, 25, 47, .86);
+      --line: rgba(147, 174, 255, .2);
+      --text: #edf2ff;
+      --muted: #9ca9c9;
+      --cyan: #68e4f3;
+      --violet: #9c8cff;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(77, 91, 180, .25), transparent 42%),
+        radial-gradient(ellipse at 85% 70%, rgba(33, 169, 191, .12), transparent 35%),
+        var(--bg);
+    }
+
+    button, select { font: inherit; }
+
+    .app {
+      width: min(100% - 28px, 760px);
+      margin: 0 auto;
+      padding: 24px 0 48px;
+    }
+
+    header, .topline, .actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+    }
+
+    .brand span { color: var(--cyan); }
+
+    select, button {
+      color: var(--text);
+      background: #111a30;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 13px;
+    }
+
+    button { cursor: pointer; }
+    button:focus-visible, select:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 38px 0 26px;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: .76rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 12px 0;
+      font-size: clamp(2.3rem, 9vw, 4.4rem);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .subtitle {
+      max-width: 520px;
+      margin: 0 auto;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .signal {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: min(70vw, 280px);
+      aspect-ratio: 1;
+      margin: 28px auto;
+      border: 1px solid rgba(104, 228, 243, .28);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(104, 228, 243, .13), transparent 65%);
+      box-shadow: 0 0 70px rgba(104, 228, 243, .08), inset 0 0 50px rgba(156, 140, 255, .08);
+    }
+
+    .signal::before, .signal::after {
+      content: "";
+      position: absolute;
+      inset: 10%;
+      border: 1px solid rgba(156, 140, 255, .35);
+      border-radius: 50%;
+      animation: pulse 4s ease-out infinite;
+    }
+
+    .signal::after {
+      inset: 22%;
+      animation-delay: 1.3s;
+    }
+
+    .signal-core {
+      display: grid;
+      place-items: center;
+      width: 34%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      color: #06111d;
+      font-size: clamp(1.5rem, 7vw, 2.7rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--cyan), #d5fbff);
+      box-shadow: 0 0 35px rgba(104, 228, 243, .45);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(.78); opacity: .8; }
+      100% { transform: scale(1.16); opacity: 0; }
+    }
+
+    .panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+    }
+
+    .panel h2 { margin: 0 0 10px; font-size: 1.25rem; }
+    .panel p { color: var(--muted); line-height: 1.65; }
+
+    .mission {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .mission-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .number {
+      display: grid;
+      place-items: center;
+      flex: 0 0 28px;
+      height: 28px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--cyan);
+      font-size: .85rem;
+    }
+
+    .actions { margin-top: 20px; }
+    .primary {
+      flex: 1;
+      padding: 14px 18px;
+      color: #06111d;
+      font-weight: 800;
+      border: 0;
+      background: linear-gradient(100deg, var(--cyan), #a8f5ff);
+    }
+
+    .secondary { color: var(--muted); }
+
+    .status {
+      min-height: 28px;
+      margin-top: 12px;
+      color: var(--cyan);
+      font-size: .92rem;
+      text-align: center;
+    }
+
+    footer {
+      padding-top: 22px;
+      color: #65718f;
+      font-size: .8rem;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      .app { width: min(100% - 20px, 760px); padding-top: 16px; }
+      .panel { padding: 18px; }
+      .actions { align-items: stretch; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="brand">ARM <span>ECHO</span></div>
+      <select id="language" aria-label="Language">
+        <option value="hy">Հայերեն</option>
+        <option value="en">English</option>
+        <option value="ru">Русский</option>
+      </select>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow" id="eyebrow">Առաջին ազդանշան</div>
+      <h1>UNKNOWN<br>SIGNAL</h1>
+      <p class="subtitle" id="subtitle">
+        Անհայտ աշխարհից ազդանշան է հասել։ Քո հետազոտությունը կարող է փոխել ընդհանուր աշխարհի պատմությունը։
+      </p>
+      <div class="signal" aria-hidden="true">
+        <div class="signal-core">E</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="topline">
+        <h2 id="missionTitle">Առաջին առաքելություն․ Անհայտ ազդանշան</h2>
+      </div>
+      <p id="missionText">
+        Դու գտնվում ես ARM ECHO-ի ընդհանուր խորհրդավոր աշխարհում։ Հետազոտիր ազդանշանի աղբյուրը, հավաքիր հուշումներ և օգնիր որոշել՝ ինչ կլինի հետո։
+      </p>
+
+      <div class="mission">
+        <div class="mission-step">
+          <span class="number">1</span>
+          <span id="step1">Ուսումնասիրիր անհայտ ազդանշանը։</span>
+        </div>
+        <div class="mission-step">
+          <span class="number">2</span>
+          <span id="step2">Հավաքիր առաջին հուշումը։</span>
+        </div>
+        <div class="mission-step">
+          <span class="number">3</span>
+          <span id="step3">Քո ընտրությամբ օգնիր ձևավորել աշխարհի հաջորդ քայլը։</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="startButton">Սկսել հետազոտությունը</button>
+        <button class="secondary" id="clueButton">Ստանալ հուշում</button>
+      </div>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <footer id="footer">ARM ECHO · Ընդհանուր աշխարհ, որը փոխվում է խաղացողների ընտրություններով</footer>
+  </main>
+
+  <script>
+    const translations = {
+      hy: {
+        eyebrow: "Առաջին ազդանշան",
+        subtitle: "Անհայտ աշխարհից ազդանշան է հասել։ Քո հետազոտությունը կարող է փոխել ընդհանուր աշխարհի պատմությունը։",
+        missionTitle: "Առաջին առաքելություն․ Անհայտ ազդանշան",
+        missionText: "Դու գտնվում ես ARM ECHO-ի ընդհանուր խորհրդավոր աշխարհում։ Հետազոտիր ազդանշանի աղբյուրը, հավաքիր հուշումներ և օգնիր որոշել՝ ինչ կլինի հետո։",
+        step1: "Ուսումնասիրիր անհայտ ազդանշանը։",
+        step2: "Հավաքիր առաջին հուշումը։",
+        step3: "Քո ընտրությամբ օգնիր ձևավորել աշխարհի հաջորդ քայլը։",
+        start: "Սկսել հետազոտությունը",
+        clue: "Ստանալ հուշում",
+        started: "Հետազոտությունը սկսված է։ Առաջին հուշումը՝ ազդանշանը կրկնվում է յուրաքանչյուր 13 րոպեն մեկ։",
+        hint: "Հուշում․ ազդանշանի մեջ կա կրկնվող երեք նոտայից բաղկացած հաջորդականություն։",
+        footer: "ARM ECHO · Ընդհանուր աշխարհ, որը փոխվում է խաղացողների ընտրություններով"
+      },
+      en: {
+        eyebrow: "First transmission",
+        subtitle: "A signal has arrived from an unknown world. Your investigation may change the story of the shared world.",
+        missionTitle: "First Mission: Unknown Signal",
+        missionText: "You are in ARM ECHO, a shared mysterious world. Investigate the signal, collect clues, and help decide what happens next.",
+        step1: "Investigate the unknown signal.",
+        step2: "Collect your first clue.",
+        step3: "Help shape the world's next step through your choice.",
+        start: "Begin investigation",
+        clue: "Get a clue",
+        started: "Investigation started. First clue: the signal repeats every 13 minutes.",
+        hint: "Clue: the signal contains a repeating sequence of three notes.",
+        footer: "ARM ECHO · A shared world shaped by its players"
+      },
+      ru: {
+        eyebrow: "Первый сигнал",
+        subtitle: "Из неизвестного мира поступил сигнал. Твоё исследование может изменить историю общего мира.",
+        missionTitle: "Первая миссия: Неизвестный сигнал",
+        missionText: "Ты находишься в ARM ECHO — общем таинственном мире. Исследуй источник сигнала, собирай подсказки и помоги решить, что будет дальше.",
+        step1: "Исследуй неизвестный сигнал.",
+        step2: "Найди первую подсказку.",
+        step3: "Помоги определить следующий шаг мира своим выбором.",
+        start: "Начать исследование",
+        clue: "Получить подсказку",
+        started: "Исследование началось. Первая подсказка: сигнал повторяется каждые 13 минут.",
+        hint: "Подсказка: в сигнале повторяется последовательность из трёх нот.",
+        footer: "ARM ECHO · Общий мир, который меняется благодаря выбору игроков"
+      }
+    };
+
+    const $ = id => document.getElementById(id);
+    let investigationStarted = false;
+
+    function setLanguage(language) {
+      const t = translations[language] || translations.hy;
+      $("eyebrow").textContent = t.eyebrow;
+      $("subtitle").textContent = t.subtitle;
+      $("missionTitle").textContent = t.missionTitle;
+      $("missionText").textContent = t.missionText;
+      $("step1").textContent = t.step1;
+      $("step2").textContent = t.step2;
+      $("step3").textContent = t.step3;
+      $("startButton").textContent = t.start;
+      $("clueButton").textContent = t.clue;
+      $("footer").textContent = t.footer;
+      $("status").textContent = "";
+      document.documentElement.lang = language;
+    }
+
+    $("language").addEventListener("change", event => {
+      setLanguage(event.target.value);
+    });
+
+    $("startButton").addEventListener("click", () => {
+      investigationStarted = true;
+      const language = $("language").value;
+      $("status").textContent = translations[language].started;
+      $("startButton").textContent = language === "hy" ? "Հետազոտությունը սկսված է" :
+        language === "ru" ? "Исследование началось" : "Investigation started";
+    });
+
+    $("clueButton").addEventListener("click", () => {
+      const language = $("language").value;
+      $("status").textContent = translations[language].hint;
+    });
+
+    setLanguage("hy");
+  </script>
+</body>
+  </html>
